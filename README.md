@@ -94,15 +94,24 @@ Well, you might remember that I mentioned that Electron apps are essentially web
 
 You can just use regular boilerplate code for now. Just add a tag with some text in it.
 
-[INSERT IMAGE]
+```html
+<html>
+  <head>
+    <title>Hello</title>
+  </head>
+  <body>
+    <h1>Hello from Electron Renderer!</h1>
+  </body>
+</html>
+```
 
 Now, let's create a `main.js` file in the root of the project. This will be the main process for the app.
 
 We can load the HTML file using Electron's `BrowserWindow` and its `loadFile` method. This method takes a path to an HTML file and loads it into the window. Then, we can call the window creation method in the `app.whenReady()` method. This method is called when Electron has finished initializing and is ready to create browser windows.
 
-[INSERT IMAGE]
+![main.js](./img/main1.png)
 
-Now, when we run the `npm start` command, Electron will create a window and load the HTML file into it.
+Now, when we run the `npm start` command, Electron will create a window and load the HTML file into it, we should see our greeting displayed in the window, the same way a web page would.
 
 I won't go into too much detail about the common main process boilerplate code, like ensuring that the app is only running one instance at a time, or handling the app's lifecycle events. You can find more information about that [here](https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file).
 
@@ -110,17 +119,17 @@ I won't go into too much detail about the common main process boilerplate code, 
 
 Well, we're going to create a **preload script** first. This will expose some OS methods to the renderer process to demonstrate how the two processes communicate.
 
-[INSERT IMAGE]
+![preload.js](./img/preload1.png)
 
 Here we are exposing the `process.versions` object to the renderer process. This object contains the versions of Node.js, Chromium, and Electron. This would normally not be accessible to the renderer process, but we are exposing it using the `contextBridge` API.
 
 Now we simply have to connect all the pieces together. We can start by adding our preload location to the main process.
 
-[INSERT IMAGE]
+![main.js](./img/main2.png)
 
 Next we can finally create our renderer process. Just a script called `index.js` that will be loaded into the HTML file. It only needs two lines to retrieve the data from the main process and display it in the HTML file.
 
-[INSERT IMAGE]
+![index.js](./img/renderer1.png)
 
 Last but not least, we need to add our renderer script to the HTML file, and create an element to display the data.
 
@@ -138,3 +147,11 @@ This is as simple as adding both a script tag and a paragraph tag.
   <script src="./renderer.js"></script>
 </html>
 ```
+
+### And that's it!
+
+Now, when we run the `npm start` command, Electron will create a window and load the HTML file into it. The renderer process will then retrieve the data from the preload and display it in the HTML file.
+
+![Electron App Result](./img/result1.png)
+
+This was essentially a shortened version of the [Official Electron Tutorial](https://www.electronjs.org/docs/tutorial/tutorial-first-app). Check it out if you want to learn more about the basics of Electron.
