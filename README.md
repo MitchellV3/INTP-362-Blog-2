@@ -155,3 +155,25 @@ Now, when we run the `npm start` command, Electron will create a window and load
 ![Electron App Result](./img/result1.png)
 
 This was essentially a shortened version of the [Official Electron Tutorial](https://www.electronjs.org/docs/tutorial/tutorial-first-app). Check it out if you want to learn more about the basics of Electron.
+
+## Finally, how do I package my app?
+
+The last step of the Electron app development is packaging. There are a few different ways to package an Electron app. The most common ways are using the `electron-packager` `electron-builder` or `electron-forge` modules.
+
+Personally I prefer `electron-builder` but they are all very similar in functionality. Packaging is very simple and straightforward.
+
+For `electron-builder` specifically, you can start by installing it as a global npm package using:
+
+`npm i -g electron-builder`
+
+Then, all you need to do is use the following command in the root project directory:
+
+`electron-builder -wml`
+
+Which will build the app for Windows, Mac, and Linux. You can also specify a specific platform using the `-w`, `-m`, or `-l` flags. Unfortunately, unless you're on a Mac, you can't build for all three platforms at once, so using this command on Windows will only build for Windows and Linux.
+
+The results of this command will be placed in the `dist` folder in the root of the project. You can then run the executable file to launch the app. An installer will also be created for each platform.
+
+## Conclusion
+
+Electron is a great framework for creating cross-platform desktop applications. It allows developers to leverage their existing knowledge of web technologies to create desktop apps. It also lets you maintain one codebase for all platforms, and access the entire node.js ecosystem. Even if it has a somewhat controversial reputation among users, Electron is a useful tool for developers who want to create desktop apps without having to learn a new language or framework for every platform and is a great way to get started with desktop app development.
