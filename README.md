@@ -24,7 +24,7 @@ One of the core concepts of Electron is that it is made up of two processes: the
 
 ### Main Process
 
-- The main process is responsible for running the app's main script specified in the `package.json` file, and allows the app to access native operating system resources. In addition, is also responsible for managing the entire lifecycle of the application.
+- The main process is responsible for running the app's main script specified in the `package.json` file, and allows the app to access native operating system resources. In addition, it's also responsible for managing the entire lifecycle of the application.
 
 ### Renderer Processes
 
@@ -48,15 +48,15 @@ So we have the main process with full operating system access, and the renderer 
 
 ![Architecture](./img/architecture.png)
 
-### Okay, that was a lot.
+### Okay, that was a lot
 
-The concepts of Electron can be a bit confusing at first, but the best way to understand them is to see them in action. So let's get started with some simple examples.
+The concepts of Electron can be a bit confusing at first, but the best way to understand them is to see them in action.
 
 ## So, let's get started
 
-I won't go into too much detail about the setup process, as it is pretty straightforward. You can find the official Electron quick start guide [here](https://www.electronjs.org/docs/tutorial/quick-start).
+I won't go into too much detail about the setup process, it's pretty straightforward. You can find the official Electron quick start guide [here](https://www.electronjs.org/docs/tutorial/quick-start).
 
-The only requirement is that you have Node.js installed. Electron isn't actually something you install globally, but rather something you install locally in your project. Electron is a project dependency, not a tool you use to build your project.
+The only requirement is that you have Node.js installed. Electron isn't actually something you install globally, but rather something you install locally in your project. Electron is a project dependency.
 
 Electron projects are built by initializing an npm package using the `npm init` command, and then installing Electron as a dependency. Scaffolding an npm project will prompt you to enter some information about your project, such as the name, version, description, etc. You can just press enter to accept the default values. The only recommended change is to set the entry point to `main.js` instead of `index.js`. As a convention, Electron apps use `main.js` as the entry point and `index.js` as the renderer process for the index.html window.
 
@@ -66,7 +66,7 @@ Electron is installed as a `devDependency` because it is only used during develo
 
 ### Almost there
 
-Now that the npm project is initialized and Electron is installed, all we need to do is edit the `package.json` file to add tell the application that Electron will look for the main process and run it in development mode.
+Now that the npm project is initialized and Electron is installed, all we need to do is edit the `package.json` file to tell the application that Electron handle the `start` command and initialize the main process.
 
 To do this, we need to add the following to the `scripts` section of the `package.json` file:
 
@@ -113,17 +113,19 @@ You can just use regular boilerplate code for now. Just add a tag with some text
 
 Now, let's create a `main.js` file in the root of the project. This will be the main process for the app.
 
-We can load the HTML file using Electron's `BrowserWindow` and its `loadFile` method. This method takes a path to an HTML file and loads it into the window. Then, we can call the window creation method in the `app.whenReady()` method. This method is called when Electron has finished initializing and is ready to create browser windows.
+We can load the HTML file using Electron's `BrowserWindow` and its `loadFile` method. This method takes a path to an HTML file and loads it into the window. Then, we can call the window creation method in the `app.whenReady()` method. This method is only called when Electron has finished initializing and is ready to create browser windows.
 
 ![main.js](./img/main1.png)
 
 Now, when we run the `npm start` command, Electron will create a window and load the HTML file into it, we should see our greeting displayed in the window, the same way a web page would.
 
+![index.html](./img/renderer2.png)
+
 I won't go into too much detail about the common main process boilerplate code, like ensuring that the app is only running one instance at a time, or handling the app's lifecycle events. You can find more information about that [here](https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file).
 
 ### So, what about the renderer process?
 
-Well, we're going to create a **preload script** first. This will expose some OS methods to the renderer process to demonstrate how the two processes communicate.
+Well, we're going to create a **preload script** first. This will expose some OS methods to the renderer process to demonstrate how _context isolation_ works.
 
 ![preload.js](./img/preload1.png)
 
@@ -139,7 +141,7 @@ Next we can finally create our renderer process. Just a script called `index.js`
 
 Last but not least, we need to add our renderer script to the HTML file, and create an element to display the data.
 
-This is as simple as adding both a script tag and a paragraph tag.
+This is as simple as adding both a script tag and a paragraph tag with the right id.
 
 ```html
 <html>
@@ -164,7 +166,7 @@ This was essentially a shortened version of the [Official Electron Tutorial](htt
 
 ## Finally, how do I package my app?
 
-The last step of the Electron app development is packaging. There are a few different ways to package an Electron app. The most common ways are using the `electron-packager` `electron-builder` or `electron-forge` modules.
+The last step of the Electron app development is packaging. There are a few different ways to package an Electron app. The most common ways are using the `electron-packager`, `electron-builder` or `electron-forge` modules.
 
 Personally I prefer `electron-builder` but they are all very similar in functionality. Packaging is very simple and straightforward.
 
