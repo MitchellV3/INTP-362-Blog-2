@@ -1,5 +1,7 @@
 # The Electron Framework and How it Makes Cross-Platform Development Easy
 
+![Electron Logo](./img/logo.png)
+
 ## Electron?
 
 Electron is a framework that allows developers to create cross-platform desktop applications using JavaScript, HTML, and CSS. It is the main GUI framework behind many notable apps such as Atom, GitHub Desktop, Discord, Visual Studio Code, Slack, and Skype.  
@@ -15,6 +17,8 @@ Want to create a desktop app using React? No problem. Want to use Angular? Go ah
 This is a huge advantage for developers who don't want to learn a new language or framework for every platform.
 
 ## Okay, but how does it work?
+
+![Processes](./img/processes.png)
 
 One of the core concepts of Electron is that it is made up of two processes: the **main process** and **renderer processes**.
 
@@ -41,6 +45,8 @@ So we have the main process with full operating system access, and the renderer 
 ### IPC
 
 - The main and renderer processes can communicate with each other using the `ipcMain` and `ipcRenderer` modules. The `ipcMain` module handles messages sent from the renderer processes to the main process, and the `ipcRenderer` module handles messages sent from the main process to the renderer processes.
+
+![Architecture](./img/architecture.png)
 
 ### Okay, that was a lot.
 
@@ -177,3 +183,15 @@ The results of this command will be placed in the `dist` folder in the root of t
 ## Conclusion
 
 Electron is a great framework for creating cross-platform desktop applications. It allows developers to leverage their existing knowledge of web technologies to create desktop apps. It also lets you maintain one codebase for all platforms, and access the entire node.js ecosystem. Even if it has a somewhat controversial reputation among users, Electron is a useful tool for developers who want to create desktop apps without having to learn a new language or framework for every platform and is a great way to get started with desktop app development.
+
+![Electron Ad](./img/electronad.png)
+
+## References
+
+- [Electron Website](https://www.electronjs.org/)
+- [Electron Documentation](https://www.electronjs.org/docs)
+- [Electron Quick Start Guide](https://www.electronjs.org/docs/tutorial/quick-start)
+- [Electron Tutorial](https://www.electronjs.org/docs/tutorial)
+- [Electron Blog](https://www.electronjs.org/blog)
+- [Electron GitHub Repository](https://github.com/electron/electron)
+- [Electron Packaging Tutorial](https://www.digitalocean.com/community/tutorials/how-to-create-your-first-cross-platform-desktop-application-with-electron-on-macos)
