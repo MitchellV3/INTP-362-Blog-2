@@ -28,11 +28,17 @@ function createWindow() {
     ptyProcess.kill();
     win = null;
   });
+}
+
+// Create the window when the app is ready
+app.whenReady().then(() => {
+  // Create the window
+  createWindow();
 
   // Spawn a new pty process with the specified shell and options
   ptyProcess = pty.spawn(shell, ["/K", "prompt $G"], {
     name: "xterm-color",
-    cwd: process.env.HOME,
+    cwd: process.cwd(),
     env: process.env,
   });
 
@@ -41,11 +47,6 @@ function createWindow() {
   ptyProcess.onData((data) => {
     win.webContents.send("terminal.incData", data);
   });
-}
-
-// Create the window when the app is ready
-app.whenReady().then(() => {
-  createWindow();
 
   // Handle incoming data from the renderer process
   // Write the data to the pty process
