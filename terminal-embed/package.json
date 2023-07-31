@@ -1,0 +1,25 @@
+{
+  "name": "terminal-embed",
+  "version": "1.0.0",
+  "description": "Testing out embedding a terminal into an electron app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mitchell",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^25.1.1"
+  },
+  "dependencies": {
+    "@electron/rebuild": "^3.2.13",
+    "electron-rebuild": "^3.2.9",
+    "node-pty": "^1.0.0",
+    "xterm": "^5.2.1",
+    "xterm-addon-fit": "^0.7.0",
+    "xterm-addon-search": "^0.12.0",
+    "xterm-addon-web-links": "^0.8.0"
+  }
+}

@@ -1,0 +1,56 @@
+body {
+  background-color: #303a52;
+  color: #e4e4e4;
+  font-family: "Cartograph CF Light", Consolas, "Courier New", monospace,
+    sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  margin: 0;
+  border-right: 3px solid #fc85ae;
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  margin: 0;
+  border-left: 3px solid #fc85ae;
+}
+
+h1 {
+  color: #fc85ae;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.terminal {
+  height: 100%;
+  width: 100%;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <link rel="stylesheet" href="index.css" />
+
+    <title>Terminal Embed</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-container">
+        <h1>Terminal Embed</h1>
+      </div>
+
+      <div class="right-container">
+        <div class="terminal" id="terminal"></div>
+      </div>
+    </div>
+
+    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
+    <script src="node_modules/xterm-addon-search/lib/xterm-addon-search.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
