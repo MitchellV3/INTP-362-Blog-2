@@ -6,31 +6,33 @@ In my last post, I covered the basic concepts of Electron, why it has such a _di
 
 ## The Project
 
-I'm going to be walking through the process of creating a small portion of a personal project I've been working on. We'll be creating an Electron app with an integrated, usable terminal. This will be done with the help of [xterm.js](https://xtermjs.org/), and [node-pty](https://github.com/microsoft/node-pty). For the front-end, we won't be using any frameworks, just plain old HTML, CSS, and JavaScript, for simplicity's sake.
+I'm going to be walking through the process of creating a small portion of a personal project I've been working on. We'll be creating an Electron app with an integrated, usable terminal. This will be done with the help of [**xterm.js**](https://xtermjs.org/), and [**node-pty**](https://github.com/microsoft/node-pty). For the front-end, we won't be using any frameworks, just plain old HTML, CSS, and JavaScript, for simplicity's sake.
 
 ### Alright, what do these do?
 
-#### xterm.js
+#### **xterm.js**
 
-- xterm.js is a front-end component that provides a terminal emulator for web apps, we'll use it to render the terminal in our Electron app.
+- **xterm.js** is a front-end component that provides a terminal emulator for web apps, we'll use it to render the terminal in our Electron app.
 
-#### node-pty
+#### **node-pty**
 
-- node-pty is a module that provides a pseudo-terminal interface for Node.js, we'll use it to create a shell session for the terminal emulator to interact with. Which essentially means that it will give us proper read and write functionality for the terminal to properly interact with our computer.
+- **node-pty** is a module that provides a pseudo-terminal interface for Node.js, we'll use it to create a shell session for the terminal emulator to interact with. Which essentially means that it will give us proper read and write functionality for the terminal to properly interact with our computer.
 
-## The Setup
+## Where to start
 
 I touched on the setup a little bit in my last post, but ultimately, your best bet is to read the official [Electron Quick Start Guide](https://www.electronjs.org/docs/tutorial/quick-start). What I _will_ do is quickly go over installing the dependencies we'll need for this project, and setting up the basic structure of the project.
 
 ### Installing Dependencies
 
-Assuming you have a basic Electron project set up, we basically just need to install node-pty, xterm.js, and any addons we want to use with xterm.js. The terminal should be open in the root directory of your project, and we'll run the following command:
+Assuming you have a basic Electron project set up, we basically just need to install **node-pty**, **xterm.js**, and any xterm addons we want to use. The terminal should be open in the root directory of your project, and we'll run the following command:
 
 ```bash
 npm install node-pty xterm xterm-addon-fit xterm-addon-web-links xterm-addon-search
 ```
 
 This will install all of the dependencies we need for this project. You can check that they were installed by looking at the `package.json` file in the root directory of your project. You should see something similar to this:
+
+#### **`package.json`**
 
 ```json
 {
@@ -46,11 +48,13 @@ This will install all of the dependencies we need for this project. You can chec
 
 ### Project Structure
 
-The project structure is pretty simple, we’ll need an index.html file to display the terminal, a `main.js` file to set up the Electron app and handle communication between the renderer process and the main process, a `renderer.js` file to set up and configure the terminal in the renderer process, and a `preload.js` file to expose methods for communication between the renderer process and the main process. Everything can just be kept in the root directory of the project to keep things simple.
+The project structure is pretty simple, we’ll need an `index.html` file to display the terminal, a `main.js` file to set up the Electron app and handle communication between the renderer process and the main process, a `renderer.js` file to set up and configure the terminal in the renderer process, and a `preload.js` file to expose methods for communication between the renderer process and the main process. Everything can just be kept in the root directory of the project to keep things simple.
 
 ## Setting up the Electron App
 
 Now that we have the basic structure of the project set up, we can start working on the Electron app itself. We’ll start by setting up the `main.js` file. We'll start by creating a `BrowserWindow` that displays our `index.html` file. We’ll also specify our `preload.js` script as the preload script for the window’s web preferences:
+
+#### **`main.js`**
 
 ```javascript
 // Import the app and BrowserWindow modules from Electron
@@ -96,6 +100,8 @@ app.whenReady().then(() => {
 });
 ```
 
+#### **`index.html`**
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +123,8 @@ All this does is create a window that displays our `index.html` file, and sets u
 If we want to communicate between the renderer process (where our terminal is displayed) and the main process (where our pty process is spawned), we’ll need to set up some methods for sending and receiving data.
 
 In our `preload.js` script, we’ll use the `contextBridge` module from Electron to expose some methods in the main world of the renderer process. These methods will allow us to send data from the renderer process to the main process using IPC (refer to my last post for more information on IPC). We’ll also use the `ipcRenderer` module from Electron to listen for data from the main process, and invoke the methods we exposed in the main world of the renderer process.
+
+#### **`preload.js`**
 
 ```javascript
 /*
@@ -151,6 +159,8 @@ Now let's go back to our `main.js` file.
 We need a way to handle any data being sent from the renderer process to the main process, and send any data from the main process to the renderer process. We’ll do this by creating a `ptyProcess` object that will spawn a shell session using the `node-pty` module, and handle any data being sent to and from the shell session.
 
 We’ll set up an event handler for incoming data from the renderer process using the `ipcMain.handle` method. We’ll also set up a pty process using `pty.spawn` and attach an event listener for incoming data from the pty process. The data will be sent to the renderer process using the `win.webContents.send` method:
+
+#### **`main.js`**
 
 ```javascript
 const { app, BrowserWindow, ipcMain } = require("electron");
@@ -225,7 +235,9 @@ Now that we have the basic setup for the Electron app, and processes communicati
 
 ## Setting up the Terminal
 
-We'll start by setting up the `index.html` file. We'll add a `div` element with the ID `"terminal"` to the body of the document. We'll also add a `script` element that loads our `renderer.js` script, and import the `xterm.css` file from the `xterm` module. Since Electron limits our ability to import directly into the renderer process, we'll also need to import the `xterm.js` and addon scripts directly into the HTML file:
+We'll start by setting up the `index.html` file. We'll add a `div` element with the ID `"terminal"` to the body of the document. We'll also add a `script` element that loads our `renderer.js` script, and import the `xterm.css` file from the `xterm` module. Since Electron limits our ability to import directly into the renderer process, we'll also need to import **xterm.js** itself and any addon scripts directly into the HTML file:
+
+#### **`index.html`**
 
 ```html
 <!DOCTYPE html>
@@ -252,6 +264,8 @@ We'll start by setting up the `index.html` file. We'll add a `div` element with 
 
 In our `renderer.js` script, we’ll create a new instance of the Terminal class with the specified options and open it in the HTML element with the ID `"terminal"` that we created in the `index.html` file. We’ll also add the `fit` addon to the terminal to automatically resize the terminal to fit the size of the window, and the `webLinks` and `search` addons to enable web links and search functionality:
 
+#### **`renderer.js`**
+
 ```javascript
 // Creates a new instance of the Terminal class from xterm.js
 const term = new Terminal();
@@ -276,6 +290,8 @@ fitAddon.fit();
 ### Last step
 
 We’ll set up event listeners to take incoming data from the main process using the `terminal.incData` method exposed by our preload script. The data will be written to the terminal using the `term.write` method. We’ll also listen for data entered into the terminal by the user with the `term.onData` event and send it to the main process using the `terminal.toTerm` method exposed by our preload script:
+
+#### **`renderer.js`**
 
 ```javascript
 // Listens for data entered into the terminal by the user using the term.onData event and sends it to the main process.
@@ -302,6 +318,8 @@ You should see the contents of the current directory displayed in the terminal.
 ### Let's add a little bit of styling
 
 This is only a small portion of a larger project, so I won't be going too in-depth with the styling. I'll just be adding a little bit to make the terminal and app window look a little nicer.
+
+#### **`index.html`**
 
 ```html
 <!DOCTYPE html>
@@ -333,6 +351,8 @@ This is only a small portion of a larger project, so I won't be going too in-dep
   </body>
 </html>
 ```
+
+#### **`index.css`**
 
 ```css
 body {
@@ -393,6 +413,8 @@ h1 {
 }
 ```
 
+#### **`renderer.js`**
+
 ```javascript
 // Creates a new instance of the Terminal class from xterm.js with the specified options.
 const term = new Terminal({
@@ -416,7 +438,7 @@ term.write("Hello from \x1B[38;2;252;133;174mxterm.js\x1B[0m \n\r");
 term.write(">");
 ```
 
-## And that's it!
+## And that's it
 
 You can wipe the sweat away and relax from trying to take in all of that information. I hope you gained a deeper understanding of how the key concepts of Electron work, and how they're implemented in a real project.
 
