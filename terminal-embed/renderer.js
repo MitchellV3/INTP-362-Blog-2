@@ -23,6 +23,7 @@ term.loadAddon(webLinksAddon);
 
 // Opens the terminal in the HTML element with the ID "terminal".
 term.open(document.getElementById("terminal"));
+
 // Fits the terminal to the size of the window.
 fitAddon.fit();
 
@@ -42,13 +43,4 @@ term.onData((data) => {
 // Writes the data to the terminal using the term.write method.
 terminal.incData((event, data) => {
   term.write(data);
-});
-
-// Resizes the terminal when the window is resized.
-// The Math.max function ensures that the terminal is at least 1 column and 1 row in size.
-term.onResize((size) => {
-  ptyProcess.resize(
-    Math.max(size ? size.cols : term.cols, 1),
-    Math.max(size ? size.rows : term.rows, 1)
-  );
 });

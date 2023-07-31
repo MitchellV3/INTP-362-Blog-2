@@ -16,18 +16,11 @@ function createWindow() {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true,
     },
   });
 
   // Load the index.html file
   win.loadFile("index.html");
-
-  // Kill the pty process and set win to null when the window is closed
-  win.on("closed", () => {
-    ptyProcess.kill();
-    win = null;
-  });
 }
 
 // Create the window when the app is ready

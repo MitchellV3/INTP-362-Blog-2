@@ -1,6 +1,6 @@
 # The Electron App Development Cycle
 
-![Electron Logo](./img/logo.png)
+![Electron Logo](./img/logo.svg)
 
 In my last post, I covered the basic concepts of Electron, why it has such a _divisive_ reputation, why you would choose it, and how to get started with it. As with basically any framework, it can be really difficult to grasp the concepts until you've actually built something with it. This time, I'll be walking through the development cycle of the start of a project.
 
@@ -8,13 +8,13 @@ In my last post, I covered the basic concepts of Electron, why it has such a _di
 
 I'm going to be walking through the process of creating a small portion of a personal project I've been working on. We'll be creating an Electron app with an integrated, usable terminal. This will be done with the help of [**xterm.js**](https://xtermjs.org/), and [**node-pty**](https://github.com/microsoft/node-pty). For the front-end, we won't be using any frameworks, just plain old HTML, CSS, and JavaScript, for simplicity's sake.
 
-### Alright, what do these do?
+### Alright, what do they do?
 
-#### **xterm.js**
+#### **`xterm.js`**
 
 - **xterm.js** is a front-end component that provides a terminal emulator for web apps, we'll use it to render the terminal in our Electron app.
 
-#### **node-pty**
+#### **`node-pty`**
 
 - **node-pty** is a module that provides a pseudo-terminal interface for Node.js, we'll use it to create a shell session for the terminal emulator to interact with. Which essentially means that it will give us proper read and write functionality for the terminal to properly interact with our computer.
 
@@ -118,11 +118,15 @@ app.whenReady().then(() => {
 
 All this does is create a window that displays our `index.html` file, and sets up some event listeners for when the window is closed, the app is activated, and all windows are closed for now, but we'll be back.
 
+### **`Result`**
+
+![Initial Window Output](./img/window1.png)
+
 ## Setting up Communication between Processes
 
 If we want to communicate between the renderer process (where our terminal is displayed) and the main process (where our pty process is spawned), we’ll need to set up some methods for sending and receiving data.
 
-In our `preload.js` script, we’ll use the `contextBridge` module from Electron to expose some methods in the main world of the renderer process. These methods will allow us to send data from the renderer process to the main process using IPC (refer to my last post for more information on IPC). We’ll also use the `ipcRenderer` module from Electron to listen for data from the main process, and invoke the methods we exposed in the main world of the renderer process.
+In our `preload.js` script, we’ll use the `contextBridge` module from Electron to expose some methods in the main world of the renderer process. These methods will allow us to send data from the renderer process to the main process using IPC (refer to my [last post](https://mitchellv3.github.io/INTP-362-Blog-2/) for more information on IPC). We’ll also use the `ipcRenderer` module from Electron to listen for data from the main process, and invoke the methods we exposed in the main world of the renderer process.
 
 #### **`preload.js`**
 
@@ -173,6 +177,7 @@ const shell = os.platform() === "win32" ? "cmd.exe" : "bash";
 let ptyProcess;
 let win;
 
+// Create the browser window.
 function createWindow() {
   // ...
 }
@@ -287,6 +292,12 @@ term.open(document.getElementById("terminal"));
 fitAddon.fit();
 ```
 
+We're almost there! The terminal is rendering properly, but you aren't able to input anything.
+
+### **`Result`**
+
+![Unusable Terminal](./img/window2.png)
+
 ### Last step
 
 We’ll set up event listeners to take incoming data from the main process using the `terminal.incData` method exposed by our preload script. The data will be written to the terminal using the `term.write` method. We’ll also listen for data entered into the terminal by the user with the `term.onData` event and send it to the main process using the `terminal.toTerm` method exposed by our preload script:
@@ -294,6 +305,8 @@ We’ll set up event listeners to take incoming data from the main process using
 #### **`renderer.js`**
 
 ```javascript
+// ...
+
 // Listens for data entered into the terminal by the user using the term.onData event and sends it to the main process.
 // Sends the data to the main process using the terminal.toTerm method exposed by the preload script
 term.onData((data) => {
@@ -313,9 +326,13 @@ Great! Now we have a fully functional terminal embedded in our Electron app. You
 dir
 ```
 
-You should see the contents of the current directory displayed in the terminal.
+You should see the contents of the current directory displayed.
 
-### Let's add a little bit of styling
+### **`Result`**
+
+![Usable Terminal](./img/window3.png)
+
+### Finally, Let's add a little bit of styling
 
 This is only a small portion of a larger project, so I won't be going too in-depth with the styling. I'll just be adding a little bit to make the terminal and app window look a little nicer.
 
@@ -436,7 +453,13 @@ const term = new Terminal({
 // \n\r is a new line and returns the cursor to the start of the line.
 term.write("Hello from \x1B[38;2;252;133;174mxterm.js\x1B[0m \n\r");
 term.write(">");
+
+// ...
 ```
+
+### **`Result`**
+
+![Styled Terminal](./img/window4.png)
 
 ## And that's it
 
