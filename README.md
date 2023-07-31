@@ -20,11 +20,11 @@ I'm going to be walking through the process of creating a small portion of a per
 
 ## Where to start
 
-I touched on the setup a little bit in my last post, but ultimately, your best bet is to read the official [Electron Quick Start Guide](https://www.electronjs.org/docs/tutorial/quick-start). What I _will_ do is quickly go over installing the dependencies we'll need for this project, and setting up the basic structure of the project.
+I touched on the setup a little bit in my last post, but ultimately, your best bet is to read the official [Electron Quick Start Guide](https://www.electronjs.org/docs/tutorial/quick-start). What I _will_ do is quickly go over installing the dependencies we'll need for this project, and setting up the file structure of the project.
 
 ### Installing Dependencies
 
-Assuming you have a basic Electron project set up, we basically just need to install **node-pty**, **xterm.js**, and any xterm addons we want to use. The terminal should be open in the root directory of your project, and we'll run the following command:
+Assuming you have a basic Electron project set up, we essentially just need to install **node-pty**, **xterm.js**, and any xterm addons we want to use. The terminal should be open in the root directory of your project, and we'll run the following command:
 
 ```bash
 npm install node-pty xterm xterm-addon-fit xterm-addon-web-links xterm-addon-search
@@ -48,7 +48,7 @@ This will install all of the dependencies we need for this project. You can chec
 
 ### Project Structure
 
-The project structure is pretty simple, we’ll need an `index.html` file to display the terminal, a `main.js` file to set up the Electron app and handle communication between the renderer process and the main process, a `renderer.js` file to set up and configure the terminal in the renderer process, and a `preload.js` file to expose methods for communication between the renderer process and the main process. Everything can just be kept in the root directory of the project to keep things simple.
+The project structure is pretty simple. We’ll need an `index.html` file to display the terminal, a `main.js` file to set up the Electron app and spawn the pty process, a `renderer.js` file to render and configure the terminal, and a `preload.js` file to expose methods for communication between the renderer process and the main process. Everything can just be kept in the root directory of the project to keep things simple.
 
 ## Setting up the Electron App
 
@@ -126,7 +126,7 @@ All this does is create a window that displays our `index.html` file, and sets u
 
 If we want to communicate between the renderer process (where our terminal is displayed) and the main process (where our pty process is spawned), we’ll need to set up some methods for sending and receiving data.
 
-In our `preload.js` script, we’ll use the `contextBridge` module from Electron to expose some methods in the main world of the renderer process. These methods will allow us to send data from the renderer process to the main process using IPC (refer to my [last post](https://mitchellv3.github.io/INTP-362-Blog-2/) for more information on IPC). We’ll also use the `ipcRenderer` module from Electron to listen for data from the main process, and invoke the methods we exposed in the main world of the renderer process.
+In our `preload.js` script, we’ll use the `contextBridge` module from Electron to expose some methods in the main world of the renderer process. These methods will allow us to send data from the renderer process to the main process using IPC (refer to my [last post](https://mitchellv3.github.io/INTP-362-Blog) for more information on IPC). We’ll also use the `ipcRenderer` module from Electron to listen for data from the main process, and invoke the methods we exposed in the main world of the renderer process.
 
 #### **`preload.js`**
 
